@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import NotFoundImage from '@/assets/images/image-not-found.png'
 import { FaStar } from "react-icons/fa6";
+import ButtonMediaAccount from "./ButtonMediaAccount";
 
 const MediaCard = (props: any) => {
   const mediaType = props.mediaType || 'movie'
@@ -25,9 +26,9 @@ const MediaCard = (props: any) => {
         className={`cursor-pointer group relative m-0 flex w-auto rounded-xl ring-gray-900/5 sm:mx-auto sm:max-w-lg ${props.imageHeight ? 'h-full' : 'h-[28rem]'}`}
       >
         <div
-          className="pointer-events-auto rounded-full bg-black px-2 py-1 opacity-100 absolute top-0 right-0 z-20 m-2 transition duration-300 ease-in-out group-hover:opacity-100"
+          className="pointer-events-auto rounded-full bg-black px-1.5 py-1 opacity-100 absolute top-0 right-0 z-20 m-2 transition duration-300 ease-in-out group-hover:opacity-100"
         >
-          {/* <ButtonMediaAccount :media="item" :disabled-account-state="disabledAccountState" /> */}
+          <div className="flex items-center justify-center"><ButtonMediaAccount media={item} /></div>
         </div>
         <div
           // v-if="!showImageOnly && mediaYear && (mediaType === 'movie' || mediaType === 'tv')"

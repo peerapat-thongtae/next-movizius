@@ -30,6 +30,10 @@ body {
   @apply bg-[#282733];
 }
 
+/* nextjs-portal {
+  display: none;
+} */
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
