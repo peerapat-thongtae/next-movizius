@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @font-face {
+  font-family: "TH SarabunPSK";
+  src: url("../../../public/font/THSarabun.ttf") format("truetype");
+}
+
+@layer base {
+  html {
+    font-family: "Sarabun", "TH SarabunPSK", sans-serif;
+  }
+} */
+
+
+/* #main-top > .active {
+  @apply border-primary-50 border-b-2 text-primary-50
+}
+
+#main-sidebar > .active {
+  @apply bg-primary-1 border-l-2  border-b-transparent border-primary-50 text-primary-50 font-bold
+}
+
+#demo > .active {
+  @apply   text-blue-500  font-bold
+} */

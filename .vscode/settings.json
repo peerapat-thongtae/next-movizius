@@ -1,0 +1,27 @@
+{
+  "typescript.tsc.autoDetect": "off",
+  "terminal.integrated.scrollback": 100000,
+  "terminal.integrated.fontFamily": "MesloLGM Nerd Font",
+  "prettier.enable": false,
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "sortJSON.contextMenu": {
+    "sortJSON": true,
+  },
+  "vueStyle.formatOnSave": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "css.validate": false,
+  
+  "i18n-ally.localesPaths": [
+    "src/locales"
+  ],
+  "i18n-ally.sourceLanguage": "th",
+  "i18n-ally.keystyle": "nested",
+  "editor.wordWrap": "off",
+  "vue.codeActions.enabled": false,
+  "typescript.tsdk": "node_modules/typescript/lib",
+}
