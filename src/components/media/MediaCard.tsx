@@ -4,6 +4,7 @@ import Link from "next/link"
 import NotFoundImage from '@/assets/images/image-not-found.png'
 import { FaStar } from "react-icons/fa6";
 import ButtonMediaAccount from "./ButtonMediaAccount";
+import { useAuth } from "@/shared/hocs/AuthProvider";
 
 const MediaCard = (props: any) => {
   const mediaType = props.mediaType || 'movie'
@@ -18,18 +19,26 @@ const MediaCard = (props: any) => {
     vote_count: item.vote_count || 0,
   }
 
+  const { isAuthenticated } = useAuth()
+
+
   const mediaYear = (item.release_date || item.first_air_date) ? dayjs(item.release_date || item.first_air_date).format('YYYY') : ''
   //   props.imageHeight ? `h-[70vh]` : 'h-96'`
   return (
-    <Link href={`/${mediaType}/${item.id}`} className="">
+    // <Link href={`/${mediaType}/${item.id}`} className="">
+    <div>
       <div
         className={`cursor-pointer group relative m-0 flex w-auto rounded-xl ring-gray-900/5 sm:mx-auto sm:max-w-lg ${props.imageHeight ? 'h-full' : 'h-[28rem]'}`}
       >
-        <div
-          className="pointer-events-auto rounded-full bg-black px-1.5 py-1 opacity-100 absolute top-0 right-0 z-20 m-2 transition duration-300 ease-in-out group-hover:opacity-100"
-        >
-          <div className="flex items-center justify-center"><ButtonMediaAccount media={item} /></div>
-        </div>
+        {isAuthenticated &&
+          <div
+            className="pointer-events-auto rounded-full bg-black px-1.5 py-1 opacity-100 absolute top-0 right-0 z-20 m-2 transition duration-300 ease-in-out group-hover:opacity-100"
+          >
+            <div className="flex items-center justify-center">
+              <ButtonMediaAccount media={item} />
+            </div>
+          </div>
+        }
         <div
           // v-if="!showImageOnly && mediaYear && (mediaType === 'movie' || mediaType === 'tv')"
           className="text-white font-bold text-sm rounded-full bg-black px-2 py-1 opacity-100 absolute top-0 left-0 z-20 m-2 transition duration-300 ease-in-out group-hover:opacity-100"
@@ -68,7 +77,7 @@ const MediaCard = (props: any) => {
       <div className="truncate text-left text-md font-bold hover:cursor-pointer hover:text-yellow-500 py-2">
         { title }
       </div>
-    </Link>
+    </div>
   )
 }
 

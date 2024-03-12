@@ -1,9 +1,11 @@
 import { forkJoin, from, map, mergeMap, of } from 'rxjs'
 import TMDBService from './tmdb-service'
 import { MovieResultsResponse, TvResultsResponse } from 'moviedb-promise'
+import { useAuth } from '@/shared/hocs/AuthProvider'
 
-const tmdb = new TMDBService()
 export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
+  const tmdb = new TMDBService()
+
   if (media_type === 'tv') {
     return from(tmdb.tvInfo({ id: id || '', append_to_response: 'account_states,external_ids,casts,crew,recommendations,similar,belongs_to_collection,watch-providers' })).pipe(
       map((resp: any) => {
@@ -40,7 +42,9 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
 }
 
 export const discoverMovie$ = (searchParam: any) => {
-  return from(tmdb.discoverMovie()).pipe(
+  const tmdb = new TMDBService()
+
+  return from(tmdb.discoverMovie(searchParam)).pipe(
     mergeMap((resp) => {
       return handleMediaInfo(resp, 'movie')
     }),
@@ -48,6 +52,8 @@ export const discoverMovie$ = (searchParam: any) => {
 }
 
 export const accountMedias$ = (mediaType: string, status: string, paging?: any) => {
+  const tmdb = new TMDBService()
+
   const sort_by = (paging?.sort_by || 'created_at.desc') as 'created_at.desc' | 'created_at.asc'
   const page = (paging?.page || 1)
   let api: Promise<MovieResultsResponse | TvResultsResponse> = tmdb.accountMovieWatchlist({ page: page, sort_by })

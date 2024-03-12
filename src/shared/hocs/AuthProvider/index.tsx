@@ -10,6 +10,7 @@ import { TMDB_API_NEW_VERSION, TMDB_BASE_URL } from '@/shared/config/tmdb';
 import { loadState, saveState } from '@/shared/helpers/localStorage';
 import STATUSES from '@/shared/constants/statuses';
 import tmdbAPI from '@/services/tmdbAPI';
+import TMDBService from '@/services/tmdb-service';
 
 
 const AuthProvider = ({ children }: any): any => {
@@ -31,6 +32,7 @@ const AuthProvider = ({ children }: any): any => {
         } = loadState() || {};
 
         if (!requestToken && initialAccessToken && initialAccountId) {
+          console.log('initial')
           setState({
             status: STATUSES.RESOLVED,
             error: null,
@@ -59,11 +61,7 @@ const AuthProvider = ({ children }: any): any => {
           { access_token: accessToken },
         )
 
-        let sessionId = ''
-
-
-        if (responseSessionId.data.session_id)
-          sessionId = responseSessionId.data.session_id
+        let sessionId = responseSessionId.data?.session_id
 
         saveState({
           request_token: '',
@@ -79,6 +77,8 @@ const AuthProvider = ({ children }: any): any => {
           accountId,
           sessionId
         });
+
+        console.log(sessionId)
       } catch (error: any) {
         setState({
           status: STATUSES.REJECTED,
@@ -201,7 +201,7 @@ const useAuth = () => {
   const isPending = state.status === STATUSES.PENDING;
   const isError = state.status === STATUSES.REJECTED;
   const isSuccess = state.status === STATUSES.RESOLVED;
-  const isAuthenticated = state.accessToken && isSuccess;
+  const isAuthenticated = state.accessToken && state.sessionId && isSuccess;
 
   return {
     ...state,

@@ -2,10 +2,12 @@ import TMDBService from "@/services/tmdb-service"
 import { MovieAccountStateResponse, ShowAccountStatesResponse } from "moviedb-promise"
 import { useEffect, useState } from "react"
 import { delay, finalize, from } from "rxjs"
+import { useAuth } from "../hocs/AuthProvider"
 
-const tmdb = new TMDBService()
 
 const useMediaAccountState = (media_id: number, media_type: string, disabled = false) => {
+  const { isAuthenticated } = useAuth()
+  const tmdb = new TMDBService()
   const [accountState, setAccountState] = useState<MovieAccountStateResponse | ShowAccountStatesResponse>({
     favorite: false,
     rated: false,
@@ -16,9 +18,9 @@ const useMediaAccountState = (media_id: number, media_type: string, disabled = f
   const [isFetched, setIsFetched] = useState(false)
 
   useEffect(() => {
-    if (media_id && !disabled)
+    if (isAuthenticated && media_id && !disabled)
       getAccountState()
-  }, [media_id])
+  }, [isAuthenticated, media_id])
 
   const getAccountState$ = () => {
     setIsLoading(true)

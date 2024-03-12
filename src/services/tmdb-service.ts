@@ -17,6 +17,7 @@ class TMDBService extends MovieDb {
   private accountId = ''
   constructor() {
     super(TMDB_API_KEY || '')
+
     this.sessionId = loadState()?.session_id || ''
     this.accountId = loadState()?.account_id || ''
 

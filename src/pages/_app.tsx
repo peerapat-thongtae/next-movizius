@@ -1,4 +1,6 @@
 import "@/styles/globals.css";
+import '@/assets/css/loading.css'
+
 // import "@/assets/css/base.css"
 // import "@/assets/css/main.css"
 // import "@/assets/css/tailwindcss.css"

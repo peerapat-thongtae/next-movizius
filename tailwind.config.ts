@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 const colors = require('tailwindcss/colors')
+const plugin = require('tailwindcss/plugin')
 
 const config: Config = {
   content: [
@@ -119,6 +120,10 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addVariant }: any) => {
+      addVariant('data-active', '&[data-active=true]')
+    }),
+  ],
 };
 export default config;
