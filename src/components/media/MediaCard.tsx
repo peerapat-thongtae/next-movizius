@@ -5,6 +5,7 @@ import NotFoundImage from '@/assets/images/image-not-found.png'
 import { FaStar } from "react-icons/fa6";
 import ButtonMediaAccount from "./ButtonMediaAccount";
 import { useAuth } from "@/shared/hocs/AuthProvider";
+import { useMemo } from "react";
 
 const MediaCard = (props: any) => {
   const mediaType = props.mediaType || 'movie'
@@ -14,6 +15,8 @@ const MediaCard = (props: any) => {
 
   const title = item.title || item.name
 
+  const size = props.size || 'MEDIUM'
+
   const ratingObj = {
     vote_average: item.vote_average || 0,
     vote_count: item.vote_count || 0,
@@ -21,14 +24,21 @@ const MediaCard = (props: any) => {
 
   const { isAuthenticated } = useAuth()
 
+  const imageHeight = useMemo(() => {
+    if(size === 'MEDIUM') {
+      return `h-[26rem]`
+    } else {
+      return 'h-[28rem]'
+    }
+  }, [])
 
-  const mediaYear = (item.release_date || item.first_air_date) ? dayjs(item.release_date || item.first_air_date).format('YYYY') : ''
-  //   props.imageHeight ? `h-[70vh]` : 'h-96'`
+
+  const mediaYear = (item.release_date || item.first_air_date) ? dayjs(item.release_date || item.first_air_date).format('YYYY') : '-'
   return (
     // <Link href={`/${mediaType}/${item.id}`} className="">
     <div>
       <div
-        className={`cursor-pointer group relative m-0 flex w-auto rounded-xl ring-gray-900/5 sm:mx-auto sm:max-w-lg ${props.imageHeight ? 'h-full' : 'h-[28rem]'}`}
+        className={`cursor-pointer group relative m-0 flex w-auto rounded-xl ring-gray-900/5 sm:mx-auto sm:max-w-lg ${imageHeight}`}
       >
         {isAuthenticated &&
           <div
@@ -49,7 +59,7 @@ const MediaCard = (props: any) => {
           <img
             // clasName="!showImageOnly && 'transition duration-300 group-hover:scale-110'"
             className="block h-full w-full scale-100 transform object-cover object-center opacity-100 transition duration-300 group-hover:scale-110"
-            src={imagePath ? `https://image.tmdb.org/t/p/${props.imageHeight ? 'original' : 'w500'}${imagePath}` : ''} 
+            src={imagePath ? `https://image.tmdb.org/t/p/original${imagePath}` : '/assets/images/image-not-found.png'} 
             alt={""}
           />
         </div>

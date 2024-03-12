@@ -7,11 +7,15 @@ import '@/assets/css/loading.css'
 import type { AppProps } from "next/app";
 import { AuthProvider, useAuth } from '@/shared/hocs/AuthProvider';
 import Navbar from "@/components/common/Navbar";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { isPending } = useAuth()
   return (
     <AuthProvider>
+      <Head>
+        <title>Movizius</title>
+      </Head>
       <div className="bg-main flex min-h-screen flex-col">
         <div className="w-full px-4 antialiased">
           {/* {props.meta} */}

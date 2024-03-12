@@ -41,6 +41,36 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
   }
 }
 
+export const searchMovies$ = (searchParam: any) => {
+  const tmdb = new TMDBService()
+
+  return from(tmdb.searchMovie(searchParam)).pipe(
+    mergeMap((resp) => {
+      return handleMediaInfo(resp, 'movie')
+    }),
+  )
+}
+
+export const searchTV$ = (searchParam: any) => {
+  const tmdb = new TMDBService()
+
+  return from(tmdb.searchTv(searchParam)).pipe(
+    mergeMap((resp) => {
+      return handleMediaInfo(resp, 'tv')
+    }),
+  )
+}
+
+export const searchPerson$ = (searchParam: any) => {
+  const tmdb = new TMDBService()
+
+  return from(tmdb.searchPerson(searchParam)).pipe(
+    mergeMap((resp) => {
+      return handleMediaInfo(resp, 'person')
+    }),
+  )
+}
+
 export const discoverMovie$ = (searchParam: any) => {
   const tmdb = new TMDBService()
 

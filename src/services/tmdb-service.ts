@@ -21,7 +21,6 @@ class TMDBService extends MovieDb {
     this.sessionId = loadState()?.session_id || ''
     this.accountId = loadState()?.account_id || ''
 
-    console.log(loadState()?.session_id, loadState()?.account_id)
   }
 
   async getMoviesWatchlist(filter: any) {

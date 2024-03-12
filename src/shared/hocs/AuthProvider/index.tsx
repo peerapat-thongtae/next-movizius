@@ -32,7 +32,6 @@ const AuthProvider = ({ children }: any): any => {
         } = loadState() || {};
 
         if (!requestToken && initialAccessToken && initialAccountId) {
-          console.log('initial')
           setState({
             status: STATUSES.RESOLVED,
             error: null,

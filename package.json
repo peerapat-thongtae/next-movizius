@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@mantine/core": "^6.0.19",
     "@mantine/hooks": "^6.0.19",
     "@mantine/nprogress": "^6.0.19",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
     "@mui/material": "^5.15.12",
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
@@ -19,15 +23,12 @@
     "moviedb-promise": "^4.0.3",
     "movier": "^3.0.7",
     "next": "14.1.3",
+    "query-string": "^9.0.0",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
     "react-lazy-load-image-component": "^1.6.0",
-    "react-toastify": "^10.0.4",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0"
+    "react-toastify": "^10.0.4"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.1.3",
@@ -36,13 +37,13 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-icons": "^3.0.0",
+    "@types/react-lazy-load-image-component": "^1.5.3",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.3",
     "postcss": "^8",
     "rxjs": "^7.8.1",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5",
-    "@types/react-lazy-load-image-component": "^1.5.3"
+    "typescript": "^5"
   }
 }

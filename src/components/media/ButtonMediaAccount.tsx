@@ -33,7 +33,7 @@ const ButtonMediaAccount = (props: any) => {
      || accountState?.watchlist
      || isLoading ? 'yellow' : 'white'
     if(isLoading) {
-      return <FaSpinner className="animate-spin" />
+      return <FaSpinner className="animate-spin" color={color} />
     }
     if(mediaStatus() !== 'watched') {
       return <FaStar size={20} className={`${isLoading && 'animate-spin'} stroke-black stroke-[20px]`} color={color} />
@@ -43,7 +43,6 @@ const ButtonMediaAccount = (props: any) => {
   }
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log('click')
     setAnchorEl(event.currentTarget);
   };
 
