@@ -31,7 +31,7 @@ const MediaGrid = (props: IMediaGridProps) => {
       {!isLoading ? 
         (
           <>
-            <div className={`grid grid-cols-${gridCols} gap-8`}>
+            <div className={`grid grid-cols-5 gap-8`}>
               {
                 items.length > 0 && items.map((media: any, index: number) => {
                   return <MediaCard size={props.size} key={index} item={media} media-type={props.mediaType} />
