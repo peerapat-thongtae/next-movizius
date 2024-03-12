@@ -6,6 +6,7 @@ import { FaStar } from "react-icons/fa6";
 import ButtonMediaAccount from "./ButtonMediaAccount";
 import { useAuth } from "@/shared/hocs/AuthProvider";
 import { useMemo } from "react";
+import PosterImage from "../common/PosterImage";
 
 const MediaCard = (props: any) => {
   const mediaType = props.mediaType || 'movie'
@@ -56,12 +57,13 @@ const MediaCard = (props: any) => {
           { mediaYear }
         </div>
         <div className="z-10 h-full w-full overflow-hidden rounded-xl  ">
-          <img
+          {/* <img
             // clasName="!showImageOnly && 'transition duration-300 group-hover:scale-110'"
             className="block h-full w-full scale-100 transform object-cover object-center opacity-100 transition duration-300 group-hover:scale-110"
             src={imagePath ? `https://image.tmdb.org/t/p/original${imagePath}` : '/assets/images/image-not-found.png'} 
             alt={""}
-          />
+          /> */}
+          <PosterImage url={`/${mediaType}/${item.id}`} image_path={imagePath} />
         </div>
         <div
         // v-if="!showImageOnly && (mediaType === 'movie' || mediaType === 'tv')"

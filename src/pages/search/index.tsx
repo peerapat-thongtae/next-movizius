@@ -65,7 +65,7 @@ const SearchMoviePage = () => {
           </Tabs.List>
 
           <Tabs.Panel value="movies">
-            <div className="px-4">
+            <div className="px-4 min-w-[70vw]">
               <MediaGrid size="MEDIUM" gridCols={4} items={medias?.results} page={page} isLoading={isLoading} setPage={setPage} totalPages={medias?.total_pages} totalResults={medias?.total_results} />
             </div>
           </Tabs.Panel>
