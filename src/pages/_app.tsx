@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import '@/assets/css/loading.css'
+import NextNProgress from 'nextjs-progressbar';
 
 // import "@/assets/css/base.css"
 // import "@/assets/css/main.css"
@@ -15,19 +16,22 @@ import { useEffect } from "react";
 export default function App({ Component, pageProps }: AppProps) {
   const { isPending } = useAuth()
   return (
-    <AuthProvider>
-      <Head>
-        <title>Movizius</title>
-      </Head>
-      <div className="bg-main flex min-h-screen flex-col">
-        <div className="w-full px-4 antialiased">
-          {/* {props.meta} */}
-          <Navbar />
+    <>
+      <NextNProgress color="#FFEB3B" startPosition={0.3} stopDelayMs={200} height={6} showOnShallow={true} />
+      <AuthProvider>
+        <Head>
+          <title>Movizius</title>
+        </Head>
+        <div className="bg-main flex min-h-screen flex-col">
+          <div className="w-full px-4 antialiased">
+            {/* {props.meta} */}
+            <Navbar />
+          </div>
+          <div className="grow text-white">
+            {!isPending && <Component {...pageProps} />}
+          </div>
         </div>
-        <div className="grow text-white">
-          {!isPending && <Component {...pageProps} />}
-        </div>
-      </div>
-    </AuthProvider>
+      </AuthProvider>
+    </>
   );
 }
