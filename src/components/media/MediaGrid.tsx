@@ -18,7 +18,7 @@ const MediaGrid = (props: IMediaGridProps) => {
   const items = props.items || []
   const page = props.page || 1
   const isLoading = props.isLoading || false
-  const gridCols = props.gridCols || '5'
+  const gridCols = props.gridCols ? `grid-cols-${props.gridCols}` : 'grid-cols-5'
 
   console.log(items)
 
@@ -31,10 +31,10 @@ const MediaGrid = (props: IMediaGridProps) => {
       {!isLoading ? 
         (
           <>
-            <div className={`grid grid-cols-${gridCols} gap-8`}>
+            <div className={`grid ${gridCols} gap-8`}>
               {
                 items.length > 0 && items.map((media: any, index: number) => {
-                  return <MediaCard size={props.size} key={index} item={media} media-type={props.mediaType} />
+                  return <MediaCard size={props.size} key={index} item={media} mediaType={props.mediaType} />
                 })
               }
             </div>
@@ -42,7 +42,7 @@ const MediaGrid = (props: IMediaGridProps) => {
               <Pagination 
                 classNames={ { control: 'text-white data-active:!bg-yellow-500 hover:!bg-white data-active:bg-yellow-500 data-active:text-black hover:text-black' }} 
                 total={props.totalPages > 500 ? 500 : props.totalPages} 
-                value={page} 
+                value={page}
                 onChange={setPage}
               />
             </div>

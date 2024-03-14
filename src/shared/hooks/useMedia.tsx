@@ -1,7 +1,7 @@
-import { discoverMovie$, searchMovies$, searchPerson$, searchTV$ } from "@/services/observable"
+import { discoverMovie$, searchMovies$, searchPerson$, searchTV$, mediaInfo$ } from "@/services/observable"
 import TMDBService from "@/services/tmdb-service"
 import { useEffect, useMemo, useState } from "react"
-import { delay, finalize } from "rxjs"
+import { catchError, delay, finalize, of } from "rxjs"
 
 export const useDiscoverMedia = () => {
   const [medias, setMedias] = useState<any>({})
@@ -21,6 +21,35 @@ export const useDiscoverMedia = () => {
   }, [page, searchParam])
 
   return { medias, page, setPage, searchParam, setSearchParam, isLoading, isError }
+}
+
+export const useMediaDetail = (id: string, mediaType: string) => {
+  const [media, setMedia] = useState<any>(null)
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const [isError, setIsError] = useState<boolean>(false)
+
+  useEffect(() => {
+    setLoading(true)
+    if(id) {
+      mediaInfo$(mediaType, id).pipe(
+        catchError(() => {
+          return of(null)
+        }),
+        finalize(() => {
+          setLoading(false)
+        })
+      ).subscribe({
+        next: (resp) => {
+          setMedia(resp)
+        },
+        error: (err) => {
+          setIsError(true)
+        }
+      })
+    }
+  }, [id])
+
+  return { media, isLoading, isError }
 }
 
 export const useSearch = (searchString: string, searchType: 'tv' | 'movie' | 'person' | 'multi' = 'multi') => {

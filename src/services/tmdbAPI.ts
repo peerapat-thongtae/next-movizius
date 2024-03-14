@@ -15,11 +15,15 @@ const tmdbAPI = axios.create({
   }
 });
 
-const alternativeTmdbAPI = axios.create({
-  baseURL: TMDB_API_BASE_URL,
-  params: {
-    api_key: TMDB_API_KEY,
-  }
+tmdbAPI.interceptors.request.use(function (response) {
+  // Any status code that lie within the range of 2xx cause this function to trigger
+  // Do something with response data
+  return response;
+}, function (error) {
+  // Any status codes that falls outside the range of 2xx cause this function to trigger
+  // Do something with response error
+  console.log('err', 'fuu')
+  return Promise.reject(error);
 });
 
 // export {

@@ -12,7 +12,7 @@ const ButtonMediaAccount = (props: any) => {
   const id = open ? 'simple-popover' : undefined;
 
   const media = props.media
-  const mediaType = props.mediaType
+  const mediaType = props.mediaType || media.media_type || 'movie'
   const disabledAccountState = props.disabledAccountState
   const { data: accountState, isLoading, addToWatchlist, addRated } = useMediaAccountState(media.id, mediaType || 'movie', disabledAccountState)
 

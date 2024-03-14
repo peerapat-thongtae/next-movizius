@@ -8,6 +8,11 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    {
+      pattern: /grid-cols-(4|5|6|7)/,
+    },
+  ],
   theme: {
     extend: {
       backgroundImage: {

@@ -5,9 +5,12 @@ import '@/assets/css/loading.css'
 // import "@/assets/css/main.css"
 // import "@/assets/css/tailwindcss.css"
 import type { AppProps } from "next/app";
+import { Tooltip } from 'react-tooltip'
 import { AuthProvider, useAuth } from '@/shared/hocs/AuthProvider';
 import Navbar from "@/components/common/Navbar";
 import Head from "next/head";
+import router from "next/router";
+import { useEffect } from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { isPending } = useAuth()

@@ -1,4 +1,4 @@
-import { forkJoin, from, map, mergeMap, of } from 'rxjs'
+import { catchError, forkJoin, from, map, mergeMap, of } from 'rxjs'
 import TMDBService from './tmdb-service'
 import { MovieResultsResponse, TvResultsResponse } from 'moviedb-promise'
 import { useAuth } from '@/shared/hocs/AuthProvider'
@@ -6,13 +6,28 @@ import { useAuth } from '@/shared/hocs/AuthProvider'
 export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
   const tmdb = new TMDBService()
 
+  const accountStatus = (acc: any) => {
+    if (acc.watchlist === true)
+      return 'watchlist'
+    else if (acc.rated)
+      return 'watched'
+    else
+      return ''
+  }
+
+  const getDirectors = (crews: any) => {
+    return crews.filter((val: any) => val.known_for_department === 'Directing' && val.job === 'Director')
+  }
+
   if (media_type === 'tv') {
     return from(tmdb.tvInfo({ id: id || '', append_to_response: 'account_states,external_ids,casts,crew,recommendations,similar,belongs_to_collection,watch-providers' })).pipe(
       map((resp: any) => {
         return {
           ...resp,
           imdb_id: resp.imdb_id || resp?.external_ids?.imdb_id,
+          account_status: accountStatus(resp.account_states),
           media_type,
+          directors: getDirectors(resp.casts?.crew)
         }
       }),
     )
@@ -34,7 +49,9 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
         return {
           ...resp,
           imdb_id: resp.imdb_id || resp?.external_ids?.imdb_id,
+          account_status: accountStatus(resp.account_states),
           media_type,
+          directors: getDirectors(resp.casts?.crew)
         }
       }),
     )
@@ -104,20 +121,32 @@ export const accountMedias$ = (mediaType: string, status: string, paging?: any) 
       mergeMap((resp) => {
         return handleMediaInfo(resp, mediaType)
       }),
+      catchError((err) => {
+        console.log('err', err)
+        return err
+      })
     )
 }
 
 const handleMediaInfo = (resp: any, mediaType: string) => {
-  const mediasInfo = resp?.results?.map((media: any) => mediaInfo$(mediaType, media.id)) || []
+  const mediasInfo = resp?.results?.map((media: any) => mediaInfo$(mediaType, media.id).pipe(
+    catchError(() => of(null)),
+  ),
+  ) || []
   if (mediasInfo.length > 0) {
     return forkJoin(mediasInfo).pipe(
-      map((resMov: any) => ({
-        ...resp,
-        results: resMov?.map((val: any) => ({
-          ...val,
-          media_type: mediaType,
-        })),
-      })),
+      map((resMov: any) => {
+        if(resMov) {
+          return {
+            ...resp,
+            results: resMov?.map((val: any) => ({
+              ...val,
+              media_type: mediaType,
+            })),
+          }
+        }
+      }),
+      
     )
   }
   else {

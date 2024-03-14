@@ -7,11 +7,12 @@ import ButtonMediaAccount from "./ButtonMediaAccount";
 import { useAuth } from "@/shared/hocs/AuthProvider";
 import { useMemo } from "react";
 import PosterImage from "../common/PosterImage";
+import { Tooltip } from 'react-tooltip'
 
 const MediaCard = (props: any) => {
-  const mediaType = props.mediaType || 'movie'
   const item = props.item
-  
+
+  const mediaType = props.mediaType || item.media_type || 'movie'
   const imagePath = item.poster_path || item.profile_path
 
   const title = item.title || item.name
@@ -87,7 +88,13 @@ const MediaCard = (props: any) => {
         </div>
       </div>
       <div className="truncate text-left text-md font-bold hover:cursor-pointer hover:text-yellow-500 py-2">
-        { title }
+        <Tooltip id="my-tooltip" className="z-[99]"/>
+        <span data-tooltip-id="my-tooltip"
+          data-tooltip-content={title}
+          data-tooltip-place="top"
+        >
+          { title }
+        </span>
       </div>
     </div>
   )
