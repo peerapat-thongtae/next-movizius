@@ -7,6 +7,9 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
   const tmdb = new TMDBService()
 
   const accountStatus = (acc: any) => {
+    if(!acc) {
+      return ''
+    }
     if (acc.watchlist === true)
       return 'watchlist'
     else if (acc.rated)
