@@ -16,7 +16,7 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
   }
 
   const getDirectors = (crews: any) => {
-    return crews.filter((val: any) => val.known_for_department === 'Directing' && val.job === 'Director')
+    return crews ? crews.filter((val: any) => val.known_for_department === 'Directing' && val.job === 'Director') : []
   }
 
   if (media_type === 'tv') {
@@ -25,9 +25,9 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
         return {
           ...resp,
           imdb_id: resp.imdb_id || resp?.external_ids?.imdb_id,
-          account_status: accountStatus(resp.account_states),
+          account_status: accountStatus(resp?.account_states),
           media_type,
-          directors: getDirectors(resp.casts?.crew)
+          directors: getDirectors(resp?.casts?.crew)
         }
       }),
     )
@@ -49,9 +49,9 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
         return {
           ...resp,
           imdb_id: resp.imdb_id || resp?.external_ids?.imdb_id,
-          account_status: accountStatus(resp.account_states),
+          account_status: accountStatus(resp?.account_states),
           media_type,
-          directors: getDirectors(resp.casts?.crew)
+          directors: getDirectors(resp?.casts?.crew)
         }
       }),
     )
