@@ -17,7 +17,7 @@ const SearchMoviePage = () => {
   const [activeTab, setActiveTab] = useState<string | null>("movies");
 
   return (
-    <div className="p-12">
+    <div className="p-12 mt-24">
       <Head>
         <title>Search : {searchString}</title>
       </Head>

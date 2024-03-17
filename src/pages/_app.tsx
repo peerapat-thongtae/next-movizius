@@ -8,10 +8,11 @@ import NextNProgress from 'nextjs-progressbar';
 import type { AppProps } from "next/app";
 import { Tooltip } from 'react-tooltip'
 import { AuthProvider, useAuth } from '@/shared/hocs/AuthProvider';
-import Navbar from "@/components/common/Navbar";
+import Navbar from "@/components/common/Nav";
 import Head from "next/head";
 import router from "next/router";
 import { useEffect } from "react";
+import 'react-modal-video/scss/modal-video.scss';
 
 export default function App({ Component, pageProps }: AppProps) {
   const { isPending } = useAuth()
@@ -23,7 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <title>Movizius</title>
         </Head>
         <div className="bg-main flex min-h-screen flex-col">
-          <div className="w-full px-4 antialiased">
+          <div className="w-full antialiased">
             {/* {props.meta} */}
             <Navbar />
           </div>

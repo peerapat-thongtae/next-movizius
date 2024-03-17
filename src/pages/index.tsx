@@ -17,7 +17,7 @@ export default function Home() {
       <Head>
         <title>Home</title>
       </Head>
-      <div className="p-12">
+      <div className="p-12 mt-24">
         <MediaGrid
           size={'LARGE'}
           isLoading={isLoading} 

@@ -36,7 +36,7 @@ const useMediaAccountState = (media_id: number, media_type: string, disabled = f
   const addToWatchlist = async (status: boolean) => {
     setIsLoading(true)
     from(tmdb.addToWatchlist(media_type, media_id, status)).pipe(
-      delay(3000),
+      delay(2000),
     ).subscribe(() => {
       getAccountState()
     })
@@ -66,7 +66,7 @@ const useMediaAccountState = (media_id: number, media_type: string, disabled = f
         },
       })
     from(api).pipe(
-      delay(3000),
+      delay(2000),
     ).subscribe(() => {
       getAccountState()
     })

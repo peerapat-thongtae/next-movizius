@@ -28,6 +28,7 @@ const config: Config = {
         'light-blue': '#49A8ED',
         'litepie-primary': '#87D084',
         'litepie-secondary': '#B3B9CE',
+        'main': '#111111',
         'primary': {
           1: '#e2f5e2',
           10: '#DCF5DB',

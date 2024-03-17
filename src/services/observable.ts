@@ -22,15 +22,31 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
     return crews ? crews.filter((val: any) => val.known_for_department === 'Directing' && val.job === 'Director') : []
   }
 
+  const getWriters = (crews: any) => {
+    return crews ? crews.filter((val: any) => val.job === 'Writer' || val.job === 'Novel' ) : []
+  }
+
+  const getTrailers = (videos: any) => {
+    const trailers = videos?.results?.filter((video: any) => video.type === "Trailer") || []
+
+    if(trailers.length === 0) {
+      return videos?.results?.filter((video: any) => video.type === "Teaser") || []
+    }
+
+    return trailers;
+  }
+
   if (media_type === 'tv') {
-    return from(tmdb.tvInfo({ id: id || '', append_to_response: 'account_states,external_ids,casts,crew,recommendations,similar,belongs_to_collection,watch-providers' })).pipe(
+    return from(tmdb.tvInfo({ id: id || '', append_to_response: 'account_states,external_ids,casts,crew,recommendations,similar,belongs_to_collection,watch-providers,videos' })).pipe(
       map((resp: any) => {
         return {
           ...resp,
           imdb_id: resp.imdb_id || resp?.external_ids?.imdb_id,
           account_status: accountStatus(resp?.account_states),
           media_type,
-          directors: getDirectors(resp?.casts?.crew)
+          directors: getDirectors(resp?.casts?.crew),
+          writers: getWriters(resp?.casts?.crew),
+          trailers: getTrailers(resp?.videos)
         }
       }),
     )
@@ -47,14 +63,16 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
     )
   }
   else {
-    return from(tmdb.movieInfo({ id: id || '', append_to_response: 'account_states,external_ids,casts,crew,recommendations,similar,belongs_to_collection,watch-providers' })).pipe(
+    return from(tmdb.movieInfo({ id: id || '', append_to_response: 'account_states,external_ids,casts,crew,recommendations,similar,belongs_to_collection,watch-providers,videos' })).pipe(
       map((resp: any) => {
         return {
           ...resp,
           imdb_id: resp.imdb_id || resp?.external_ids?.imdb_id,
           account_status: accountStatus(resp?.account_states),
           media_type,
-          directors: getDirectors(resp?.casts?.crew)
+          directors: getDirectors(resp?.casts?.crew),
+          writers: getWriters(resp?.casts?.crew),
+          trailers: getTrailers(resp?.videos)
         }
       }),
     )
