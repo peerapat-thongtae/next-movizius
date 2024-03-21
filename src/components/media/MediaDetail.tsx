@@ -25,11 +25,11 @@ export const MediaDetail = ({ media }: any) => {
         
   }
    
-  console.log(media)
-   
   const bgImage = `https://www.themoviedb.org/t/p/original/${media.backdrop_path}`
   const date = media.release_date || media.first_air_date;
   const title = media.title || media.name
+  const release_date = DateHelper.formatDate(media.release_date || media.first_air_date, 'DD/MM/YYYY')
+  const originalName = media.original_title || title || '-'
   return (
     <div className="">
       <ModalVideo
@@ -39,7 +39,7 @@ export const MediaDetail = ({ media }: any) => {
         videoId={media.trailers?.[0]?.key}
         onClose={() => setIsOpenTrailer(false)}
       />
-      <BGWrapper bgImage={bgImage } className="opacity-[0.8]">
+      <BGWrapper bgimage={bgImage } className="opacity-[0.8]">
         <div className="flex justify-center h-full items-center">
           <FaPlayCircle className="cursor-pointer hover:text-yellow-500" onClick={() => setIsOpenTrailer(true)} size={50} />
         </div>
@@ -47,12 +47,12 @@ export const MediaDetail = ({ media }: any) => {
       <div className="px-64 pb-24">
         <div className="flex justify-between">
           <span className="text-4xl text-left font-extrabold truncate ">{title}</span>
-          <span className="text-4xl text-left font-extrabold truncate ">{DateHelper.formatDate(date, 'DD/MM/YYYY')}</span>
+          <span className="text-4xl text-left font-extrabold truncate ">{release_date}</span>
         </div>
         <hr className="my-8" />
         <div className="flex gap-8">
           <div className="">
-            <div className="h-[430px] w-[300px]">
+            <div className="h-full w-full">
               <PosterImage image_path={media?.poster_path} />
             </div>
           </div>
@@ -75,20 +75,28 @@ export const MediaDetail = ({ media }: any) => {
               <div className="text-2xl">Details</div>
               <div className="text-sm py-4">
                 <div className="flex gap-2 py-1">
+                  <span>Original Name:</span>
+                  <span className="text-gray-400 ">{originalName}</span>
+                </div>
+                <div className="flex gap-2 py-1">
                   <span>Director:</span>
-                  <span className="text-gray-400 hover:text-yellow-500">{media.directors?.[0]?.name}</span>
+                  <span className="text-gray-400 hover:text-yellow-500 link">{media.directors?.[0]?.name}</span>
                 </div>
                 <div className="flex gap-2 py-1">
                   <span>Writers:</span>
-                  <span className="text-gray-400 hover:text-yellow-500">{media.writers?.[0]?.name}</span>
+                  <span className="text-gray-400 hover:text-yellow-500 link">{media.writers?.[0]?.name}</span>
                 </div>
                 <div className="flex gap-2 py-1">
                   <span>Language:</span>
-                  <span className="text-gray-400 hover:text-yellow-500">{media.original_language?.toUpperCase()}</span>
+                  <span className="text-gray-400 hover:text-yellow-500 link">{media.original_language?.toUpperCase()}</span>
+                </div>
+                <div className="flex gap-2 py-1">
+                  <span>Statuse:</span>
+                  <span className="text-gray-400 ">{media.status}</span>
                 </div>
                 <div className="flex gap-2 py-1">
                   <span>Release Date:</span>
-                  <span className="text-gray-400 ">{DateHelper.formatDate(media.release_date, 'DD/MM/YYYY')}</span>
+                  <span className="text-gray-400 ">{release_date}</span>
                   <span className="text-gray-200 hover:text-yellow-500 cursor-pointer">See more..</span>
                 </div>
                    
@@ -110,8 +118,8 @@ export const MediaDetail = ({ media }: any) => {
   )
 }
    
-const BGWrapper = styled.div<any>`
-     background: ${props => `linear-gradient(to bottom, rgba(4, 21, 45, 0) 0%, #111111 90%), url(${props.bgImage})`};
+const BGWrapper = styled.div<{ bgimage: string }>`
+     background: ${props => `linear-gradient(to bottom, rgba(4, 21, 45, 0) 0%, #111111 90%), url(${props.bgimage || ''})`};
      width: 100%;
      height: 68vh;
      background-size: cover;

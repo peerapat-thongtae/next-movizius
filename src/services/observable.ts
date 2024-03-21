@@ -36,8 +36,14 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
     return trailers;
   }
 
+  const releaseDateTH = (releaseDates: any) => {
+    const dateResults = releaseDates?.results || []
+    const findTH = dateResults.find((val: any) => val.iso_3166_1 === 'TH')
+    return findTH?.release_dates?.[0]?.release_date
+  }
+
   if (media_type === 'tv') {
-    return from(tmdb.tvInfo({ id: id || '', append_to_response: 'account_states,external_ids,casts,crew,recommendations,similar,belongs_to_collection,watch-providers,videos' })).pipe(
+    return from(tmdb.tvInfo({ id: id || '', append_to_response: 'account_states,external_ids,casts,crew,recommendations,similar,belongs_to_collection,watch-providers,videos,release_dates' })).pipe(
       map((resp: any) => {
         return {
           ...resp,
@@ -46,7 +52,8 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
           media_type,
           directors: getDirectors(resp?.casts?.crew),
           writers: getWriters(resp?.casts?.crew),
-          trailers: getTrailers(resp?.videos)
+          trailers: getTrailers(resp?.videos),
+          // release_date:
         }
       }),
     )
@@ -63,7 +70,7 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
     )
   }
   else {
-    return from(tmdb.movieInfo({ id: id || '', append_to_response: 'account_states,external_ids,casts,crew,recommendations,similar,belongs_to_collection,watch-providers,videos' })).pipe(
+    return from(tmdb.movieInfo({ id: id || '', append_to_response: 'account_states,external_ids,casts,crew,recommendations,similar,belongs_to_collection,watch-providers,videos,release_dates' })).pipe(
       map((resp: any) => {
         return {
           ...resp,
@@ -72,7 +79,9 @@ export const mediaInfo$ = (media_type: string, id: any, imdbData = false) => {
           media_type,
           directors: getDirectors(resp?.casts?.crew),
           writers: getWriters(resp?.casts?.crew),
-          trailers: getTrailers(resp?.videos)
+          trailers: getTrailers(resp?.videos),
+          release_date: resp.release_date,
+          release_date_th: releaseDateTH(resp.release_dates),
         }
       }),
     )
@@ -109,14 +118,23 @@ export const searchPerson$ = (searchParam: any) => {
   )
 }
 
-export const discoverMovie$ = (searchParam: any) => {
+export const discoverMedia$ = (mediaType: string, searchParam: any) => {
   const tmdb = new TMDBService()
 
-  return from(tmdb.discoverMovie(searchParam)).pipe(
-    mergeMap((resp) => {
-      return handleMediaInfo(resp, 'movie')
-    }),
-  )
+  if(mediaType === 'movie') {
+    return from(tmdb.discoverMovie(searchParam)).pipe(
+      mergeMap((resp) => {
+        return handleMediaInfo(resp, mediaType)
+      }),
+    )
+  } else {
+    return from(tmdb.discoverTv(searchParam)).pipe(
+      mergeMap((resp) => {
+        return handleMediaInfo(resp, mediaType)
+      }),
+    )
+  }
+  
 }
 
 export const accountMedias$ = (mediaType: string, status: string, paging?: any) => {
@@ -143,7 +161,6 @@ export const accountMedias$ = (mediaType: string, status: string, paging?: any) 
         return handleMediaInfo(resp, mediaType)
       }),
       catchError((err) => {
-        console.log('err', err)
         return err
       })
     )
@@ -175,4 +192,14 @@ const handleMediaInfo = (resp: any, mediaType: string) => {
       ...resp,
     })
   }
+}
+
+export const getScheduleMovie = (release_date: string, country: string = 'TH') => {
+  const tmdb = new TMDBService()
+
+  return from(tmdb.discoverMovie({ region: country, "release_date.gte": release_date, "release_date.lte": release_date })).pipe(
+    mergeMap((resp) => {
+      return handleMediaInfo(resp, 'movie')
+    }),
+  )
 }

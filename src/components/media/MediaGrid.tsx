@@ -11,7 +11,7 @@ interface IMediaGridProps {
      totalPages: number,
      mediaType?: 'movie' | 'tv' | 'person' | 'multi'
      gridCols?: number
-     size?: 'LARGE' | 'SMALL' | 'MEDIUM'
+     size?: 'LARGE' | 'SMALL' | 'MEDIUM' | 'AUTO'
 }
 
 const MediaGrid = (props: IMediaGridProps) => {
@@ -20,14 +20,12 @@ const MediaGrid = (props: IMediaGridProps) => {
   const isLoading = props.isLoading || false
   const gridCols = props.gridCols ? `grid-cols-${props.gridCols}` : 'grid-cols-5'
 
-  console.log(items)
-
   const setPage = (page: number) => {
     props.setPage(page)
   }
 
   return (
-    <div>
+    <div className="w-full">
       {!isLoading ? 
         (
           <>
@@ -49,7 +47,7 @@ const MediaGrid = (props: IMediaGridProps) => {
           </>
         )
         :
-        <div className="flex items-center justify-center min-h-[76vh]">
+        <div className="flex items-center justify-center min-h-[76vh] w-full">
           <Loading />
         </div>
 

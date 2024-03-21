@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import { FaPlayCircle } from "react-icons/fa";
 import ModalVideo from "react-modal-video"
 import { MediaDetail } from "@/components/media/MediaDetail"
+import Head from "next/head"
 
 const LoadingDiv = () => {
   return (
@@ -25,10 +26,9 @@ const LoadingDiv = () => {
 }
 
 const MovieDetailPage = (props: any) => {
-  const router = useRouter()
-  const id = router.query?.id as string
-  console.log('id', id)
-  const { media, isLoading } = useMediaDetail(id, 'media')
+  const id = props.id
+  const type = props.mediaType
+  const { media, isLoading } = useMediaDetail(id, type)
 
   const render = () => {
     if(isLoading) {
@@ -41,6 +41,9 @@ const MovieDetailPage = (props: any) => {
   }
   return (
     <>
+      <Head>
+        <title>{id} {media?.title}</title>
+      </Head>
       {
         render()
       }
@@ -48,6 +51,11 @@ const MovieDetailPage = (props: any) => {
   )
 }
 
+MovieDetailPage.getInitialProps = async ({ query }: any) => {
+  const { id, mediaType } = query
+
+  return { id, mediaType }
+}
 
 
 

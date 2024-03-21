@@ -77,7 +77,6 @@ const AuthProvider = ({ children }: any): any => {
           sessionId
         });
 
-        console.log(sessionId)
       } catch (error: any) {
         setState({
           status: STATUSES.REJECTED,
@@ -114,7 +113,6 @@ const AuthProvider = ({ children }: any): any => {
       });
       window.location.replace(`${TMDB_BASE_URL}/auth/access?request_token=${requestToken}`);
     } catch (error: any) {
-      console.log('[TheUser login] error => ', error);
       setState({
         status: STATUSES.REJECTED,
         error
@@ -150,7 +148,6 @@ const AuthProvider = ({ children }: any): any => {
         sessionId: '',
       });
     } catch (error: any) {
-      console.log('[TheUser logout] error => ', error);
 
       if (error.status === 404) {
         saveState({

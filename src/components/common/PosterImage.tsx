@@ -12,7 +12,6 @@ const PosterImage = (props: IPosterImageProps) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
   const onLoaded = () => {
     setIsLoaded(true)
-    console.log(true)
   }
   return (
     // <img src={props.image_path ? `https://www.themoviedb.org/t/p/w500/${props.image_path}` : `/assets/images/image-not-found.png`} />
@@ -20,7 +19,7 @@ const PosterImage = (props: IPosterImageProps) => {
       <Link href={props.url || ''}>
         <LazyLoadImage
           alt={props.image_path}
-          src={props.image_path ? `https://www.themoviedb.org/t/p/original/${props.image_path}` : `/assets/images/image-not-found.png`}
+          src={props.image_path ? `https://www.themoviedb.org/t/p/w500/${props.image_path}` : `/assets/images/image-not-found.png`}
           wrapperClassName={`${props.url && 'cursor-pointer'
           } h-full w-full rounded-lg transition duration-300 group-hover:scale-110`}
           className={`${props.url && 'cursor-pointer'

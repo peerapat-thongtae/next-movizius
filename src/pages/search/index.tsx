@@ -13,7 +13,7 @@ import Head from "next/head";
 const SearchMoviePage = () => {
   const searchParams = useSearchParams();
 
-  const searchString = searchParams.get('name') as string
+  const searchString = searchParams?.get('name') as string
   const [activeTab, setActiveTab] = useState<string | null>("movies");
 
   return (

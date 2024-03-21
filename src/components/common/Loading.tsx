@@ -1,6 +1,6 @@
 const Loading = (props: any) => {
   return (
-    <div className="overlay-content align-center">
+    <div className="overlay-content align-center w-full">
       <div className="wrapper">
         <div className="pacmancontainer">
           <div className="pacman" />

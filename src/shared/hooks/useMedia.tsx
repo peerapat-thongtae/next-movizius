@@ -1,24 +1,54 @@
-import { discoverMovie$, searchMovies$, searchPerson$, searchTV$, mediaInfo$ } from "@/services/observable"
-import TMDBService from "@/services/tmdb-service"
+import { discoverMedia$, searchMovies$, searchPerson$, searchTV$, mediaInfo$ } from "@/services/observable"
 import { useEffect, useMemo, useState } from "react"
-import { catchError, delay, finalize, of } from "rxjs"
+import { catchError, delay, finalize, from, map, of } from "rxjs"
+import { getTitleDetailsByIMDBId } from "movier"
+import { useDispatch, useSelector } from "react-redux";
+import { setDiscover } from "@/shared/stores/action";
+import { DiscoverMedia, DiscoverState } from "../stores/reducer"
 
-export const useDiscoverMedia = () => {
+export const useDiscoverMedia = (mediaType: "movie" | "tv", initialSearchParam?: any) => {
+  const dispatch = useDispatch();
+  const initialParam = useSelector((state: DiscoverState) => {
+    if(mediaType === 'movie') {
+      return state.movie
+    } else {
+      return state.tv
+    }
+  })
+  const defaultPage = initialParam?.page
+  
   const [medias, setMedias] = useState<any>({})
-  const [page, setPage] = useState<number>(1)
-  const [searchParam, setSearchParam] = useState<any>({})
+  const [page, setPage] = useState<number>(defaultPage || 1)
+  const [searchParam, setSearch] = useState<DiscoverMedia>({
+    ...initialSearchParam,
+    ...initialParam,
+  })
   const [isLoading, setLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
 
-  useEffect(() => {
-    // console.log(typeof accountMedias$('movie', 'watchlist').subscribe((resp) => setMovies(resp)))
+  const setSearchParam = (param: any) => {
+    setSearch(param)
+    setPage(1)
+  }
+
+  const handleDiscover = () => {
     setLoading(true)
-    discoverMovie$({ ...searchParam, page }).pipe(
+    discoverMedia$(mediaType, { ...searchParam, page }).pipe(
       finalize(() => {
         setLoading(false)
       })
     ).subscribe((resp: any) => setMedias(resp))
-  }, [page, searchParam])
+
+    dispatch(setDiscover(mediaType, { ...searchParam, page: page }));
+  }
+
+  // useEffect(() => {
+  //   setPage(1)
+  // }, [searchParam])
+
+  useEffect(() => {
+    handleDiscover()
+  }, [page, searchParam, mediaType])
 
   return { medias, page, setPage, searchParam, setSearchParam, isLoading, isError }
 }
@@ -83,4 +113,43 @@ export const useSearch = (searchString: string, searchType: 'tv' | 'movie' | 'pe
   }, [page, searchString])
    
   return { medias, page, setPage, searchParam, setSearchParam, isLoading, isError, fetch }
+}
+
+export const useIMDB = (imdbId: string, mediaType: string, disabled = false) => {
+  const [response, setResponse] = useState<any>({})
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const [isError, setIsError] = useState<boolean>(false)
+
+
+  const fetch = () => {
+    if(!imdbId) {
+      return;
+    }
+    if(disabled) {
+      // setResponse({})
+      return;
+    }
+    setLoading(true)
+    from(getTitleDetailsByIMDBId(imdbId)).pipe(
+      catchError(() => of(null)),
+      map(resp => ({
+        ...resp,
+        vote_average: resp?.mainRate?.rate,
+        vote_count: resp?.mainRate?.votesCount,
+      })),
+      finalize(() => {
+        setLoading(false)
+      }),
+    ).subscribe({
+      next: (resp) => {
+        setResponse(resp)
+      }
+    })
+  }
+
+  useEffect(() => {
+    fetch()
+  }, [imdbId])
+
+  return { response, isLoading, isError, fetch }
 }

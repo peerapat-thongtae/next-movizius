@@ -13,26 +13,29 @@ import Head from "next/head";
 import router from "next/router";
 import { useEffect } from "react";
 import 'react-modal-video/scss/modal-video.scss';
+import { Provider } from "react-redux";
+import store from '@/shared/stores/store'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { isPending } = useAuth()
   return (
     <>
-      <NextNProgress color="#FFEB3B" startPosition={0.3} stopDelayMs={200} height={6} showOnShallow={true} />
-      <AuthProvider>
-        <Head>
-          <title>Movizius</title>
-        </Head>
-        <div className="bg-main flex min-h-screen flex-col">
-          <div className="w-full antialiased">
-            {/* {props.meta} */}
-            <Navbar />
+      <Provider store={store}>
+        <NextNProgress color="#FFEB3B" startPosition={0.3} stopDelayMs={200} height={6} showOnShallow={true} />
+        <AuthProvider>
+          <Head>
+            <title>Movizius</title>
+          </Head>
+          <div className="bg-main flex min-h-screen flex-col">
+            <div className="w-full antialiased">
+              <Navbar />
+            </div>
+            <div className="grow text-white">
+              {!isPending && <Component {...pageProps} />}
+            </div>
           </div>
-          <div className="grow text-white">
-            {!isPending && <Component {...pageProps} />}
-          </div>
-        </div>
-      </AuthProvider>
+        </AuthProvider>
+      </Provider>
     </>
   );
 }
